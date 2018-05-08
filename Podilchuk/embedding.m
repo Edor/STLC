@@ -1,9 +1,26 @@
-function [] = embedding(I, alpha, w)
-if (size(I,1)*size(I,2)/4) ~= size(w,1)
-    error('Errore: immagine e marchio di dimensioni incompatibili')
+function [] = embedding(I, w)
+[m,n]=size(I);
+rm=mod(m,8);
+rn=mod(n,8);
+if rm==0
+    mm=0;
+else mm=8-rm;
 end
-N = 8 * ones(1,size(I,1));
-C = mat2cell(I,N,N);
+if rn==0
+    nn=0;
+else nn=8-rn;
+end
+IM=zeros(m+mm,n+nn);
+for i=1:m
+ for j=1:n
+    IM(i,j)=I(i,j);
+ end
+end
+
+alpha = 0.1;
+N = 8 * ones(1,size(IM,1)/8);
+M = 8 * ones(1,size(IM,2)/8);
+C = mat2cell(I,N,M);
 counter = 1;
 for i = 1:N
     for j = 1:N
